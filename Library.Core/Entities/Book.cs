@@ -14,11 +14,15 @@ namespace Library.Core.Entities
             Author = author;
             ISBN = iSBN;
             PublicationYear = publicationYear;
+            Loans = new();
         }
         public string Title { get; private set; }
         public string Author { get; private set; }
         public string ISBN { get; private set; }
-        public int PublicationYear { get; private set; } 
+        public int PublicationYear { get; private set; }
+        public List<Loan> Loans { get; private set; }
+
+
 
     }
 }

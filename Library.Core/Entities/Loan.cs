@@ -4,20 +4,19 @@
     {
         public Loan(int idUser, int idBook, DateTime expectedReturnDate, DateTime loanDate)
         {
-            this.idUser = idUser;
-            this.idBook = idBook;
-            this.expectedReturnDate = expectedReturnDate;
-            this.loanDate = loanDate;
+            this.IdUser = idUser;
+            this.IdBook = idBook;
+            this.ExpectedReturnDate = expectedReturnDate;
+            this.LoanDate = loanDate;
         }
 
-        public int idUser { get; private set; }
-        public int idBook { get; private set; }
-        public DateTime expectedReturnDate { get; private set; }
-        public DateTime loanDate { get; private set; }
-        public DateTime returnDate { get; private set; }
-
-
-      
+        public int IdUser { get; private set; }
+        public User User { get; private set; }
+        public int IdBook { get; private set; }
+        public Book Book { get; private set; }
+        public DateTime ExpectedReturnDate { get; private set; }
+        public DateTime LoanDate { get; private set; }
+        public DateTime ReturnDate { get; private set; }      
 
     }
 }
