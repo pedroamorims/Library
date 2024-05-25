@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Persistence\Configurations\" />
+    <Folder Include="Persistence\Migrations\" />
+    <Folder Include="Persistence\Repositories\" />
+  </ItemGroup>
+
 </Project>
