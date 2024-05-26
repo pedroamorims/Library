@@ -1,4 +1,6 @@
+using Library.Core.Repositories;
 using Library.Infraestructure;
+using Library.Infraestructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,10 @@ builder.Services.AddDbContext<LibraryDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryCs"))
     );
 
+
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 
 var app = builder.Build();
 
