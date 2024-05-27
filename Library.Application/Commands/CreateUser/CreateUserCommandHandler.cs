@@ -1,5 +1,6 @@
 ﻿using Library.Core.Entities;
 using Library.Core.Repositories;
+using Library.Core.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,19 @@ namespace Library.Application.Commands.CreateUser
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IAuthService _authService;
 
-        public CreateUserCommandHandler(IUserRepository userRepository)
+        public CreateUserCommandHandler(IUserRepository userRepository, IAuthService authService)
         {
             _userRepository = userRepository;
+            _authService = authService;
         }
 
         public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User(request.FullName, request.Email, request.Email, request.Role);
+            var passwordHash = _authService.ComputeSha256Hash(request.Password);
+
+            var user = new User(request.FullName, request.Email, passwordHash, request.Role);
 
             await _userRepository.AddAsync(user);
 
