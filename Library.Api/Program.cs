@@ -1,3 +1,7 @@
+using FluentValidation.AspNetCore;
+using FreelApp.Api.Filters;
+using Library.Application.Commands.CreateBook;
+using Library.Application.Validators;
 using Library.Core.Repositories;
 using Library.Infraestructure;
 using Library.Infraestructure.Persistence.Repositories;
@@ -12,10 +16,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)))
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateBookCommandValidator>());
+
+
 builder.Services.AddDbContext<LibraryDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryCs"))
     );
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateBookCommand).Assembly));
 
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
