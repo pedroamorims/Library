@@ -3,7 +3,9 @@ using FreelApp.Api.Filters;
 using Library.Application.Commands.CreateBook;
 using Library.Application.Validators;
 using Library.Core.Repositories;
+using Library.Core.Services;
 using Library.Infraestructure;
+using Library.Infraestructure.Auth;
 using Library.Infraestructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +31,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Cre
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
