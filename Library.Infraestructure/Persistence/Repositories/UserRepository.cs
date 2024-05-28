@@ -25,6 +25,9 @@ namespace Library.Infraestructure.Persistence.Repositories
         public Task<List<User>> GetAllAsync()
             => _dbContext.Users.ToListAsync();
 
+        public async Task<User?> GetByEmailandPasswordAsync(string email, string passwordHash)
+         => await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
+
         public Task<User?> GetByIdAsync(int id)
             => _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
 

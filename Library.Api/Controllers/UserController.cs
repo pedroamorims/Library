@@ -1,4 +1,5 @@
 ﻿using Library.Application.Commands.CreateUser;
+using Library.Application.Commands.LoginUser;
 using Library.Application.Queries.GetAllUsers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,19 @@ namespace Library.Api.Controllers
             var users = await _mediator.Send(getAllUsersQuery);
 
             return Ok(users);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] LoginUserCommand command)
+        {
+            var user = await _mediator.Send(command);
+
+            if(user == null)
+            {
+                return BadRequest("Usuário ou Senha inválidos");
+            } 
+
+            return Ok(user);
         }
 
     }
