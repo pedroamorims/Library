@@ -2,6 +2,7 @@
 using Library.Application.Commands.LoginUser;
 using Library.Application.Queries.GetAllUsers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,6 +20,7 @@ namespace Library.Api.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
         {
             var id = await _mediator.Send(command);
@@ -27,6 +29,7 @@ namespace Library.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Get()
         {
             var getAllUsersQuery = new GetAllUsersQuery();
@@ -36,6 +39,7 @@ namespace Library.Api.Controllers
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<IActionResult> Put([FromBody] LoginUserCommand command)
         {
             var user = await _mediator.Send(command);

@@ -1,6 +1,7 @@
 ﻿using Library.Application.Commands.CreateBook;
 using Library.Application.Queries.GetAllBooks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -18,6 +20,7 @@ namespace Library.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Post([FromBody] CreateBookCommand command)
         {
             var id = await _mediator.Send(command);
