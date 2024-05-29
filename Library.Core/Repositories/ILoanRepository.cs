@@ -12,10 +12,11 @@ namespace Library.Core.Repositories
         Task<List<Loan>> GetAllAsync();
         Task<Loan?> GetByIdAsync(int id);
         Task<List<Loan>> GetByBookIdAsync(int bookId);
+        Task<List<Loan>> GetAllAsyncWithUserandBook();
         Task<Loan?> GetActiveByBookId(int bookId);
         Task<List<Loan>> GetByUserIdAsync(int userId);
         Task<List<Loan>> GetActivesByUserId(int userId);
-        Task Add(Loan loan);
-        Task Update(Loan loan);
+        Task AddAsync(Loan loan);
+        Task UpdateAsync(Loan loan);
     }
 }

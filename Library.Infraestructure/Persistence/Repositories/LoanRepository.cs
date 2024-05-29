@@ -13,7 +13,7 @@ namespace Library.Infraestructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Add(Loan loan)
+        public async Task AddAsync(Loan loan)
         {
             await _dbContext.AddAsync(loan);
             await _dbContext.SaveChangesAsync();
@@ -28,16 +28,26 @@ namespace Library.Infraestructure.Persistence.Repositories
         public async Task<List<Loan>> GetAllAsync()
             => await _dbContext.Loans.ToListAsync();
 
+        public async Task<List<Loan>> GetAllAsyncWithUserandBook()
+        {
+            return await _dbContext
+                            .Loans
+                            .Include(b => b.Book)
+                            .Include(u => u.User)
+                            .ToListAsync();
+        }
+   
+
         public async Task<List<Loan>> GetByBookIdAsync(int bookId)
             => await _dbContext.Loans.Where(l => l.IdBook == bookId).ToListAsync();
 
         public async Task<List<Loan>> GetByUserIdAsync(int userId)
              => await _dbContext.Loans.Where(l => l.IdUser == userId).ToListAsync();
-
+         
         public async Task<Loan?> GetByIdAsync(int id)
             => await _dbContext.Loans.SingleOrDefaultAsync(l => l.Id == id);
 
-        public async Task Update(Loan loan)
+        public async Task UpdateAsync(Loan loan)
         {
             _dbContext.Entry(loan).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();

@@ -38,9 +38,9 @@ namespace Library.Api.Controllers
             return Ok(users);
         }
 
-        [HttpPut]
+        [HttpGet("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put([FromBody] LoginUserCommand command)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
             var user = await _mediator.Send(command);
 
