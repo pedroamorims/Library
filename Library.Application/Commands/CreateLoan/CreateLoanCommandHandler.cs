@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Commands.CreateLoan
 {
-    internal class CreateLoanCommandHandler : IRequestHandler<CreateLoanCommand, int>
+    public class CreateLoanCommandHandler : IRequestHandler<CreateLoanCommand, int>
     {
         private readonly ILoanRepository _loanRepository;
         private readonly IUserRepository _userRepository;
