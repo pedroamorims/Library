@@ -1,4 +1,5 @@
 ﻿using Library.Application.Commands.CreateBook;
+using Library.Application.Commands.DeleteBook;
 using Library.Application.Queries.GetAllBooks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,23 @@ namespace Library.Api.Controllers
 
             return Ok(books);
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var commandDelete = new DeleteBookCommand(id);
+                await _mediator.Send(commandDelete);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }

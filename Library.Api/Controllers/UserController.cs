@@ -1,4 +1,6 @@
 ﻿using Library.Application.Commands.CreateUser;
+using Library.Application.Commands.DeleteBook;
+using Library.Application.Commands.DeleteUser;
 using Library.Application.Commands.LoginUser;
 using Library.Application.Queries.GetAllUsers;
 using MediatR;
@@ -38,7 +40,23 @@ namespace Library.Api.Controllers
             return Ok(users);
         }
 
-        [HttpGet("login")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var commandDelete = new DeleteUserCommand(id);
+                await _mediator.Send(commandDelete);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
