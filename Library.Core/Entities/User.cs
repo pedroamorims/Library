@@ -22,5 +22,6 @@ namespace Library.Core.Entities
         public string Password {  get; private set; }
         public string Role { get; private set; }
         public List<Loan> Loans {get ; private set;}
+        public List<WaitList> WaitLists { get; private set; }
     }
 }

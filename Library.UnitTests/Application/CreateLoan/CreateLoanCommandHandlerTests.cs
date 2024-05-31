@@ -77,5 +77,34 @@ namespace Library.UnitTests
             await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
         }
 
+        [Fact]
+        public async Task Handle_ValidRequest_ReturnsLoanId()
+        {
+            // Arrange
+            var loanRepositoryMock = new Mock<ILoanRepository>();
+            var userRepositoryMock = new Mock<IUserRepository>();
+            var bookRepositoryMock = new Mock<IBookRepository>();
+
+            var book = new Book("Title", "Author", "ISBN", 2000);
+            var user = new User("FullName", "email", "password", "admin");
+
+            bookRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(book);
+            userRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(user);
+            loanRepositoryMock.Setup(repo => repo.GetActiveByBookId(It.IsAny<int>()))
+                .ReturnsAsync((Loan)null);
+
+
+            var handler = new CreateLoanCommandHandler(loanRepositoryMock.Object, userRepositoryMock.Object, bookRepositoryMock.Object);
+            var command = new CreateLoanCommand(1, 1, DateTime.Now.AddDays(7), DateTime.Now);
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result >= 0);
+        }
+
     }
 }
