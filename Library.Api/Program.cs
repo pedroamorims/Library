@@ -86,6 +86,7 @@ builder.Services
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
+builder.Services.AddScoped<IWaitListRepository, WaitListRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 

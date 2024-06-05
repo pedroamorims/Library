@@ -4,14 +4,14 @@ using MediatR;
 
 namespace Library.Application.Queries.GetAllBooks
 {
-    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, List<BooksViewModel>>
+    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, BaseResponse<List<BooksViewModel>>>
     {
         private readonly IBookRepository _bookRepository;
         public GetAllBooksQueryHandler(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
         }
-        public async Task<List<BooksViewModel>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<List<BooksViewModel>>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
             var books = await _bookRepository.GetAllAsync();
 
@@ -19,7 +19,7 @@ namespace Library.Application.Queries.GetAllBooks
                 .Select(b => new BooksViewModel(b.Id, b.Title, b.Author, b.Active))
                 .ToList();
 
-            return booksViewModel;
+            return BaseResponse<List<BooksViewModel>>.Success(booksViewModel);
         }
     }
 }

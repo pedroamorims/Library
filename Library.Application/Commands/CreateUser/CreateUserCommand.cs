@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Commands.CreateUser
 {
-    public class CreateUserCommand : IRequest<int>
+    public class CreateUserCommand : IRequest<BaseResponse<int>>
     {
         public CreateUserCommand(string fullName, string email, string password, string role)
         {

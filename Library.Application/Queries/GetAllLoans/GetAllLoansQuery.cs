@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Library.Application.Queries.GetAllLoans
 {
-    public class GetAllLoansQuery : IRequest<List<LoansViewModel>>
+    public class GetAllLoansQuery : IRequest<BaseResponse<List<LoansViewModel>>>
     {
     }
 }

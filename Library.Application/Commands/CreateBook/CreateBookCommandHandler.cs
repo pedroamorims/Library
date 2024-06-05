@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Commands.CreateBook
 {
-    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, int>
+    public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, BaseResponse<int>>
     {
         private readonly IBookRepository _bookRepository;
 
@@ -17,13 +17,13 @@ namespace Library.Application.Commands.CreateBook
         {
             _bookRepository = bookRepository;
         }
-        public async Task<int> Handle(CreateBookCommand request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<int>> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
             var book = new Book(request.Title, request.Author, request.ISBN, request.PublicationYear);
 
             await _bookRepository.AddAsync(book);
 
-            return book.Id;
+            return BaseResponse<int>.Success(book.Id);
         }
     }
 }

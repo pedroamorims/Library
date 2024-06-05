@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Queries.GetAllUsers
 {
-    public class GetAllUsersQuery : IRequest<List<UsersViewModel>>
+    public class GetAllUsersQuery : IRequest<BaseResponse<List<UsersViewModel>>>
     {
     }
 }

@@ -1,4 +1,5 @@
-﻿using Library.Application.Commands.CreateUser;
+﻿using Azure;
+using Library.Application.Commands.CreateUser;
 using Library.Application.Commands.DeleteBook;
 using Library.Application.Commands.DeleteUser;
 using Library.Application.Commands.LoginUser;
@@ -25,9 +26,17 @@ namespace Library.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
         {
-            var id = await _mediator.Send(command);
+            var response = await _mediator.Send(command);
 
-            return Ok(id);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+            else
+            {
+                return Ok(response);
+            }
+
         }
 
         [HttpGet]

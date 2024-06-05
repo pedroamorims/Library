@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Commands.CreateUser
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, BaseResponse<int>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
@@ -21,7 +21,7 @@ namespace Library.Application.Commands.CreateUser
             _authService = authService;
         }
 
-        public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<int>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var passwordHash = _authService.ComputeSha256Hash(request.Password);
 
@@ -29,7 +29,7 @@ namespace Library.Application.Commands.CreateUser
 
             await _userRepository.AddAsync(user);
 
-            return user.Id;
+            return BaseResponse<int>.Success(user.Id);
 
         }
     }

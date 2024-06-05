@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Queries.GetAllLoans
 {
-    public class GetAllLoansQueryHandler : IRequestHandler<GetAllLoansQuery, List<LoansViewModel>>
+    public class GetAllLoansQueryHandler : IRequestHandler<GetAllLoansQuery, BaseResponse<List<LoansViewModel>>>
     {
         private readonly ILoanRepository _loanRepository;
 
@@ -18,14 +18,14 @@ namespace Library.Application.Queries.GetAllLoans
             _loanRepository = loanRepository;
         }
 
-        public async Task<List<LoansViewModel>> Handle(GetAllLoansQuery request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<List<LoansViewModel>>> Handle(GetAllLoansQuery request, CancellationToken cancellationToken)
         {
             var loans = await _loanRepository.GetAllAsyncWithUserandBook();
 
             var loanViewModel = loans.Select(
                                     l => new LoansViewModel(l.Id, l.Book.Title, l.User.Email, l.LoanDate, l.ExpectedReturnDate)).ToList();
 
-            return loanViewModel;
+            return BaseResponse<List<LoansViewModel>>.Success(loanViewModel);
 
          
 

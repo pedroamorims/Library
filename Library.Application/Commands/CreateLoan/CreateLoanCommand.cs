@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Commands.CreateLoan
 {
-    public class CreateLoanCommand : IRequest<int>
+    public class CreateLoanCommand : IRequest<BaseResponse<int>>
     {
         public CreateLoanCommand(int idUser, int idBook, DateTime expectedReturnDate, DateTime loanDate)
         {

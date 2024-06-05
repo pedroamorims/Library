@@ -1,4 +1,5 @@
 ﻿using Library.Application.ViewModels;
+using Library.Core.Entities;
 using Library.Core.Repositories;
 using MediatR;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Queries.GetAllUsers
 {
-    public class GetAllUserQueryHandler : IRequestHandler<GetAllUsersQuery, List<UsersViewModel>>
+    public class GetAllUserQueryHandler : IRequestHandler<GetAllUsersQuery, BaseResponse<List<UsersViewModel>>>
     {
         private readonly IUserRepository _userRepository;
 
@@ -18,15 +19,15 @@ namespace Library.Application.Queries.GetAllUsers
             _userRepository = userRepository;
         }
 
-        public async Task<List<UsersViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<List<UsersViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetAllAsync();
 
             var usersViewModel = users
                 .Select(u => new UsersViewModel(u.Id, u.FullName, u.Email))
-                .ToList();
+            .ToList();
 
-            return usersViewModel;
+            return BaseResponse<List<UsersViewModel>>.Success(usersViewModel);
         }
     }
 }

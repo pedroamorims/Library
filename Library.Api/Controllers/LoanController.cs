@@ -1,4 +1,5 @@
-﻿using Library.Application.Commands.CreateLoan;
+﻿using Azure;
+using Library.Application.Commands.CreateLoan;
 using Library.Application.Queries.GetAllLoans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +24,16 @@ namespace Library.Api.Controllers
         {
             try
             {
-                var id = await _mediator.Send(command);
-                return Ok(id);
+                var response = await _mediator.Send(command);
+
+                if (!response.IsSuccess)
+                {
+                    return BadRequest(response);
+                }
+                else
+                {
+                    return Ok(response);
+                }
             }
             catch (InvalidOperationException ex)
             {

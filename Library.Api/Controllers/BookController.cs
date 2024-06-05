@@ -1,4 +1,5 @@
-﻿using Library.Application.Commands.CreateBook;
+﻿using Azure;
+using Library.Application.Commands.CreateBook;
 using Library.Application.Commands.DeleteBook;
 using Library.Application.Queries.GetAllBooks;
 using MediatR;
@@ -24,9 +25,15 @@ namespace Library.Api.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Post([FromBody] CreateBookCommand command)
         {
-            var id = await _mediator.Send(command);
-
-            return Ok(id);
+            var response = await _mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+            else
+            {
+                return Ok(response);
+            }
         }
 
         [HttpGet]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Commands.CreateBook
 {
-    public class CreateBookCommand : IRequest<int>
+    public class CreateBookCommand : IRequest<BaseResponse<int>>
     {
         public CreateBookCommand(string title, string author, string iSBN, int publicationYear)
         {
