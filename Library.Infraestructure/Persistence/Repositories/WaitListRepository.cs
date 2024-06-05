@@ -35,5 +35,14 @@ namespace Library.Infraestructure.Persistence.Repositories
             _dbContext.Entry(waitList).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<List<WaitList>> GetAllAsyncWithUserandBook()
+        {
+            return await _dbContext
+                            .WaitLists
+                            .Include(b => b.Book)
+                            .Include(u => u.User)
+                            .ToListAsync();
+        }
     }
 }

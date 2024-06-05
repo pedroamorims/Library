@@ -52,5 +52,8 @@ namespace Library.Infraestructure.Persistence.Repositories
             _dbContext.Entry(loan).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<Loan?> GetActiveByUserandBookId(int userId, int bookId)
+           => await _dbContext.Loans.SingleOrDefaultAsync(l => l.IdBook == bookId && l.IdUser == userId &&l.Active == true);
     }
 }

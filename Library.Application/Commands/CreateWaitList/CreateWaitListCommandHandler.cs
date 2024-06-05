@@ -14,12 +14,13 @@ namespace Library.Application.Commands.CreateWaitList
         private readonly IWaitListRepository _waitListRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IUserRepository _userRepository;
-
-        public CreateWaitListCommandHandler(IWaitListRepository waitListRepository, IBookRepository bookRepository, IUserRepository userRepository)
+        private readonly ILoanRepository _loanRepository;
+        public CreateWaitListCommandHandler(IWaitListRepository waitListRepository, IBookRepository bookRepository, IUserRepository userRepository, ILoanRepository loanRepository)
         {
             _waitListRepository = waitListRepository;
             _bookRepository = bookRepository;
             _userRepository = userRepository;
+            _loanRepository = loanRepository;
         }
 
         public async Task<BaseResponse<int>> Handle(CreateWaitListCommand request, CancellationToken cancellationToken)
@@ -27,24 +28,30 @@ namespace Library.Application.Commands.CreateWaitList
             var book = await _bookRepository.GetByIdAsync(request.IdBook);
             if (book == null || !book.Active)
             {
-                BaseResponse<int>.Failure("Livro não encontrado ou inativo");
+                return BaseResponse<int>.Failure("Livro não encontrado ou inativo");
             }
 
             if (book.Available)
             {
-                BaseResponse<int>.Failure("O livro está disponível para empréstimo");
+                return BaseResponse<int>.Failure("O livro está disponível para empréstimo");
             }
 
             var user = await _userRepository.GetByIdAsync(request.IdUser);
             if (user == null || !user.Active)
             {
-                BaseResponse<int>.Failure("Usuário não encontrado ou inativo");
+                return BaseResponse<int>.Failure("Usuário não encontrado ou inativo");
+            }
+
+            var loanExist = await _loanRepository.GetActiveByUserandBookId(user.Id, book.Id);
+            if (loanExist != null)
+            {
+                return BaseResponse<int>.Failure($"O livro já está com este usuário");
             }
 
             var waitListExists = await _waitListRepository.GetActiveByUserandBookAsync(user.Id,book.Id);
             if (waitListExists != null)
             {
-                BaseResponse<int>.Failure($"Lista de espera já existe para esse usuário e este livro");
+                return BaseResponse<int>.Failure($"Lista de espera já existe para esse usuário e este livro");
             }
 
             var waitList = new WaitList(request.IdUser, request.IdBook);

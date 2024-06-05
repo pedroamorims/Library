@@ -16,6 +16,7 @@ namespace Library.Core.Repositories
         Task<WaitList?> GetActiveByUserandBookAsync(int userId, int bookId);
         Task AddAsync(WaitList waitList);    
         Task UpdateAsync(WaitList waitList);
+        Task<List<WaitList>> GetAllAsyncWithUserandBook();
 
 
 

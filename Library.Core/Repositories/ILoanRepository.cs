@@ -16,6 +16,7 @@ namespace Library.Core.Repositories
         Task<Loan?> GetActiveByBookId(int bookId);
         Task<List<Loan>> GetByUserIdAsync(int userId);
         Task<List<Loan>> GetActivesByUserId(int userId);
+        Task<Loan?> GetActiveByUserandBookId(int userId, int bookId);
         Task AddAsync(Loan loan);
         Task UpdateAsync(Loan loan);
     }
