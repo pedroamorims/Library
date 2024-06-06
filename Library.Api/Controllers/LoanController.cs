@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Library.Application.Commands.CreateLoan;
+using Library.Application.Commands.ReturnLoan;
 using Library.Application.Queries.GetAllLoans;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,30 @@ namespace Library.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("ReturnLoan")]
+        public async Task<IActionResult> ReturnLoan(ReturnLoanCommand command)
+        {
+            try
+            {
+                var response = await _mediator.Send(command);
+
+                if (!response.IsSuccess)
+                {
+                    return BadRequest(response);
+                }
+                else
+                {
+                    return Ok(response);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Get()

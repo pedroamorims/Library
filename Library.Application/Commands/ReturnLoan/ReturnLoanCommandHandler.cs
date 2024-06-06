@@ -1,26 +1,25 @@
-﻿using Library.Core.Repositories;
+﻿using Library.Core.DTO;
+using Library.Core.Repositories;
+using Library.Core.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Application.Commands.ReturnLoan
 {
-    internal class ReturnLoanCommandHandler : IRequestHandler<ReturnLoanCommand, BaseResponse<string>>
+    public class ReturnLoanCommandHandler : IRequestHandler<ReturnLoanCommand, BaseResponse<string>>
     {
         private readonly ILoanRepository _loanRepository;
         private readonly IBookRepository _bookRepository;
         private readonly IUserRepository _userRepository;
         private readonly IWaitListRepository _waitListRepository;
+        private readonly INotificationService _notificationService;
 
-        public ReturnLoanCommandHandler(ILoanRepository loanRepository, IBookRepository bookRepository, IUserRepository userRepository, IWaitListRepository waitListRepository)
+        public ReturnLoanCommandHandler(ILoanRepository loanRepository, IBookRepository bookRepository, IUserRepository userRepository, IWaitListRepository waitListRepository, INotificationService notificationService)
         {
             _loanRepository = loanRepository;
             _bookRepository = bookRepository;
             _userRepository = userRepository;
             _waitListRepository = waitListRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<BaseResponse<string>> Handle(ReturnLoanCommand request, CancellationToken cancellationToken)
@@ -45,7 +44,12 @@ namespace Library.Application.Commands.ReturnLoan
 
             loan.Return(request.ReturnDate);
 
+            await _loanRepository.UpdateAsync(loan);
+
             book.isAvailable(true);
+
+            await _bookRepository.UpdateAsync(book);
+
 
             var waitList = await _waitListRepository.GetAllActivesnotNotifiedWithUserByBookAsync(book.Id);
             if (waitList != null)
@@ -53,10 +57,16 @@ namespace Library.Application.Commands.ReturnLoan
                 foreach (var item in waitList)
                 {
                     item.BookAvailable(); 
-                    
-                    //Notificar
+                    WaitListInfoDTO waitListInfoDTO = new WaitListInfoDTO(item.Id, item.Book.Title, item.User.Email);
+                    _notificationService.NotifyBookAvailable(waitListInfoDTO);
+
+                    await _waitListRepository.UpdateAsync(item);
                 }
             }
+
+
+
+            return BaseResponse<string>.Success($"Devolução Concluída");
 
         }
     }
