@@ -16,7 +16,13 @@
         public Book Book { get; private set; }
         public DateTime ExpectedReturnDate { get; private set; }
         public DateTime LoanDate { get; private set; }
-        public DateTime ReturnDate { get; private set; }      
+        public DateTime ReturnDate { get; private set; }    
+        
+        public void Return(DateTime returnDate)
+        {
+            ReturnDate = returnDate;
+            Deactivate();
+        }
 
     }
 }

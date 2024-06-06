@@ -1,4 +1,5 @@
 ﻿using Library.Core.Entities;
+using Library.Core.Enums;
 using Library.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +20,8 @@ namespace Library.Infraestructure.Persistence.Repositories
         public async Task<List<WaitList>> GetAllAsync()
           => await _dbContext.WaitLists.ToListAsync();
 
-        public async Task<List<WaitList>> GetAllByBookAsync(int bookId)
-          => await _dbContext.WaitLists.Where(w => w.IdBook == bookId).ToListAsync();
+        public async Task<List<WaitList>> GetAllActivesnotNotifiedWithUserByBookAsync(int bookId)
+          => await _dbContext.WaitLists.Include(w => w.User).Where(w => w.IdBook == bookId && w.Active == true && w.Status == WaitListStatusEnum.Created).ToListAsync();
 
         public async Task<List<WaitList>> GetAllByUserAsync(int userId)
           => await _dbContext.WaitLists.Where(w => w.IdUser == userId).ToListAsync();
