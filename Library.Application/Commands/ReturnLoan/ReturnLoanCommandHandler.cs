@@ -44,12 +44,7 @@ namespace Library.Application.Commands.ReturnLoan
 
             loan.Return(request.ReturnDate);
 
-            await _loanRepository.UpdateAsync(loan);
-
             book.isAvailable(true);
-
-            await _bookRepository.UpdateAsync(book);
-
 
             var waitList = await _waitListRepository.GetAllActivesnotNotifiedWithUserByBookAsync(book.Id);
             if (waitList != null)
@@ -59,12 +54,10 @@ namespace Library.Application.Commands.ReturnLoan
                     item.BookAvailable(); 
                     WaitListInfoDTO waitListInfoDTO = new WaitListInfoDTO(item.Id, item.Book.Title, item.User.Email);
                     _notificationService.NotifyBookAvailable(waitListInfoDTO);
-
-                    await _waitListRepository.UpdateAsync(item);
                 }
             }
 
-
+            await _loanRepository.SaveChangesAsync();
 
             return BaseResponse<string>.Success($"Devolução Concluída");
 

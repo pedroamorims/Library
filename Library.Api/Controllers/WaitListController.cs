@@ -1,6 +1,8 @@
 ﻿using Library.Application.Commands.CreateWaitList;
+using Library.Application.Commands.DeleteWaitList;
 using Library.Application.Queries.GetAllWaitLists;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class WaitListController : ControllerBase
     {
@@ -48,6 +51,16 @@ namespace Library.Api.Controllers
             return Ok(loans);
         }
 
+        [HttpDelete("id")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleteWaitListCommand = new DeleteWaitListCommand(id);
+
+            await _mediator.Send(deleteWaitListCommand);
+
+            return NoContent();
+
+        }
 
     }
 }

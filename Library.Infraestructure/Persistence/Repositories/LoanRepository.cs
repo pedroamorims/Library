@@ -55,5 +55,10 @@ namespace Library.Infraestructure.Persistence.Repositories
 
         public async Task<Loan?> GetActiveByUserandBookId(int userId, int bookId)
            => await _dbContext.Loans.SingleOrDefaultAsync(l => l.IdBook == bookId && l.IdUser == userId &&l.Active == true);
+
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

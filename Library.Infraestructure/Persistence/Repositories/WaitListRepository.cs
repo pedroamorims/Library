@@ -45,5 +45,13 @@ namespace Library.Infraestructure.Persistence.Repositories
                             .Include(u => u.User)
                             .ToListAsync();
         }
+
+        public async Task<WaitList?> GetById(int id)
+          => await _dbContext.WaitLists.SingleOrDefaultAsync(w => w.Id == id);
+
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

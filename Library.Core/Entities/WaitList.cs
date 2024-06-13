@@ -32,12 +32,15 @@ namespace Library.Core.Entities
                 NotifiedAt = notificationDate;
             }
         }
-        public void CancelWaitList(DateTime notificationDate)
+        public void Cancel()
         {
-            Status = WaitListStatusEnum.Cancelled;
-            Deactivate();
+            if (Status != WaitListStatusEnum.NotificationSent)
+            {
+                Status = WaitListStatusEnum.Cancelled;
+                Deactivate();
+            }
         }
-        public void FinishWaitList()
+        public void Finish()
         {
             Status = WaitListStatusEnum.Finished;
         }

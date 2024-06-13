@@ -9,6 +9,7 @@ namespace Library.Core.Repositories
 {
     public interface IWaitListRepository
     {
+        Task<WaitList?> GetById(int id);
         Task<List<WaitList>> GetAllAsync();
         Task<List<WaitList>> GetAllActivesnotNotifiedWithUserByBookAsync(int bookId);
         Task<List<WaitList>> GetAllByUserAsync(int bookId);
@@ -17,6 +18,7 @@ namespace Library.Core.Repositories
         Task AddAsync(WaitList waitList);    
         Task UpdateAsync(WaitList waitList);
         Task<List<WaitList>> GetAllAsyncWithUserandBook();
+        Task SaveChangesAsync();
 
 
 

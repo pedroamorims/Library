@@ -23,7 +23,7 @@ namespace Library.Application.Queries.GetAllWaitLists
             var waitLists = await _waitListRepository.GetAllAsyncWithUserandBook();
 
             var waitListViewModel = waitLists.Select(
-                                    l => new WaitListViewModel(l.Id, l.Book.Title, l.User.Email)).ToList();
+                                    l => new WaitListViewModel(l.Id, l.Book.Title, l.User.Email, l.Status)).ToList();
 
             return BaseResponse<List<WaitListViewModel>>.Success(waitListViewModel);
         }

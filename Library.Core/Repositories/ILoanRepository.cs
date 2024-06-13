@@ -19,5 +19,7 @@ namespace Library.Core.Repositories
         Task<Loan?> GetActiveByUserandBookId(int userId, int bookId);
         Task AddAsync(Loan loan);
         Task UpdateAsync(Loan loan);
+
+        Task SaveChangesAsync();
     }
 }

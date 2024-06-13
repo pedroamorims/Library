@@ -3,6 +3,7 @@ using Library.Application.Commands.CreateLoan;
 using Library.Application.Commands.ReturnLoan;
 using Library.Application.Queries.GetAllLoans;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class LoanController : ControllerBase
     {
